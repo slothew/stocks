@@ -119,7 +119,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # figure out which stock the user wants to get info for.
-    parser.add_argument("--ticker", default="MSFT")
+    parser.add_argument("--ticker", default="msft")
 
     args = parser.parse_args()
 
