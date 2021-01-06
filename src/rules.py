@@ -10,7 +10,7 @@ def buy_rule_1(ticker):
     """
     First buy rule.
 
-    :return: True if the buy rule should indicate a buy.
+    :return: True if the 52 week trend is positive.
     """
     # if the 52 week trend is positive, buy!
     if ticker.info["52WeekChange"] > 0:
@@ -18,20 +18,23 @@ def buy_rule_1(ticker):
             f"52 week change of {ticker.info['52WeekChange']} is positive, suggest BUY!"
         )
         return True
+    return False
 
 
 def buy_rule_2(ticker):
     """
     Second buy rule.
 
-    :return: True if the buy rule should indicate a buy.
+    :return: True if the current price is lower than the market open price. False otherwise.
     """
+
     # if the price has declined since market open, buy!
     if ticker.info["regularMarketOpen"] - ticker.info["regularMarketPrice"] > 0:
         print(
             f"Current price of {ticker.info['regularMarketPrice']} is less than the opening price of {ticker.info['regularMarketOpen']}, suggest BUY"
         )
         return True
+    return False
 
 
 def is_buy(ticker: yfinance.Ticker):

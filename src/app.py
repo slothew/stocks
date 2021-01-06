@@ -62,6 +62,7 @@ def monitor_stock(ticker: str, should_buy_fn, event: threading.Event, interval: 
             print("Failed getting stock info, can't check if we should buy it...")
         else:
             # call user function to "analyze" stock
+            print(stock.info)
             if should_buy_fn(stock):
                 print("BUY")
             else:
