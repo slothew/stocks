@@ -43,7 +43,12 @@ pip install -r requirements.txt
 ## Run
 
 ```bash
-python -m src.app --ticker tsla
+# poll for updates on the stock every 20 seconds
+python -m src.app tsla --interval 20
+
+# default polling interval
+python -m src.app tsla
+
 ```
 
 Then press `Ctrl+C` to stop the program.
