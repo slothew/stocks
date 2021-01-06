@@ -10,6 +10,9 @@ import argparse
 import time
 import threading
 
+# custom imports
+from src import rules
+
 # installed imports (externa libraries)
 import yfinance
 
@@ -37,31 +40,6 @@ def get_stock_info(ticker: str):
         return None
 
     return stock
-
-
-def check_fn(ticker: yfinance.Ticker):
-    """
-    Use this function to return True if the stock looks like a BUY, or False if it doesn't look like a BUY.
-    """
-
-    # implement your own, better rules (and check that the examples are what the comments say they are!)
-
-    # if the 52 week trend is positive, buy!
-    if ticker.info["52WeekChange"] > 0:
-        print(
-            f"52 week change of {ticker.info['52WeekChange']} is positive, suggest BUY!"
-        )
-        return True
-
-    # if the price has declined since market open, buy!
-    if ticker.info["regularMarketOpen"] - ticker.info["regularMarketPrice"] > 0:
-        print(
-            f"Current price of {ticker.info['regularMarketPrice']} is less than the opening price of {ticker.info['regularMarketOpen']}, suggest BUY"
-        )
-        return True
-
-    # if we didn't hit any "buy trigger" rules, tell caller we're not interested in buying it.
-    return False
 
 
 def monitor_stock(ticker: str, should_buy_fn, event: threading.Event, interval: int):
@@ -111,11 +89,12 @@ def main(args):
     event = threading.Event()
     thread = threading.Thread(
         target=monitor_stock,
-        args=(args.ticker, check_fn, event, UPDATE_INTERVAL_SEC),
+        args=(args.ticker, rules.is_buy, event, UPDATE_INTERVAL_SEC),
     )
     thread.start()
 
     # wait for user to press ctrl+c
+    print("Press CTRL+C to exit.")
     try:
         while True:
             time.sleep(0.1)
