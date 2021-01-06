@@ -25,8 +25,7 @@ def get_stock_info(ticker: str):
     Get stock information for 'ticker'.
 
     :param ticker: the stock ticker, e.g. 'tsla'
-    :return: dictionary (dict) of stock info, or None if no stock information was
-    available.
+    :return: Ticker object from the yfinance library.
     """
 
     # since we're not sure if the library supports mixed case ticker names, force the entire ticker to lowercase.
