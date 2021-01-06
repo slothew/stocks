@@ -3,7 +3,11 @@ Starter program for stock analysis.
 
 Run this program by typing this in a terminal window:
 
-python app.py --ticker msft
+python app.py tsla 
+
+Or, specifying an interval:
+
+python app.py msft --interval 20
 """
 # standard imports (included with python)
 import argparse
@@ -16,8 +20,8 @@ from src import rules
 # installed imports (externa libraries)
 import yfinance
 
-# interval to wait between updates for ticker information.
-UPDATE_INTERVAL_SEC = 10
+# minimum interval to wait between updates for ticker information.
+MIN_UPDATE_INTERVAL_SEC = 10
 
 
 def get_stock_info(ticker: str):
@@ -69,7 +73,7 @@ def monitor_stock(ticker: str, should_buy_fn, event: threading.Event, interval: 
                 print("DON'T BUY")
 
         # wait for either termination signal or interval, whichever is shorter.
-        print(f"Waiting {UPDATE_INTERVAL_SEC} seconds...")
+        print(f"Waiting {interval} seconds...")
         if event.wait(interval):
             print("Thread signalled, exiting...")
             return
@@ -83,13 +87,18 @@ def main(args):
     :return: True if this function runs successfully. False otherwise.
     """
 
+    # try and cap (albeit arbitrarily) the rate at which we hammer the yfinance data source...
+    if args.interval < MIN_UPDATE_INTERVAL_SEC:
+        print("Don't spam the yfinance API...")
+        return False
+
     print(f"Getting stock info for ticket {args.ticker}")
 
     # start a thread to call the check function over and over.
     event = threading.Event()
     thread = threading.Thread(
         target=monitor_stock,
-        args=(args.ticker, rules.is_buy, event, UPDATE_INTERVAL_SEC),
+        args=(args.ticker, rules.is_buy, event, args.interval),
     )
     thread.start()
 
@@ -119,7 +128,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # figure out which stock the user wants to get info for.
-    parser.add_argument("--ticker", default="msft")
+    parser.add_argument("ticker", help="Stock ticker symbol (e.g. 'tsla')")
+    parser.add_argument(
+        "--interval",
+        help="delay between stock updates",
+        type=int,
+        default=MIN_UPDATE_INTERVAL_SEC,
+    )
 
     args = parser.parse_args()
 
