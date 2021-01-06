@@ -11,7 +11,7 @@ pip install -r requirements.txt
 # Run
 
 ```bash
-python app.py --ticker tsla
+python -m src.app --ticker tsla
 ```
 
 Then press `Ctrl+C` to stop the program.
