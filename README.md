@@ -10,6 +10,10 @@ Tested on MacOS.
 
   `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
+- git
+
+  `brew install git`
+
 - python 3.6 or higher
 
   `brew install python3`
@@ -27,6 +31,10 @@ Tested on MacOS.
 Check out the code into a folder of your choosing, then in a terminal window:
 
 ```bash
+mkdir -p ~/git
+cd ~/git
+git clone https://github.com/slothew/stocks.git
+cd stocks
 virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
