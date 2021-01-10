@@ -16,7 +16,7 @@ Tested on MacOS.
 
 - python 3.6 or higher
 
-  `brew install python3`
+  `brew install python3.6`
 
 - pypy 3.6 or higher
 
